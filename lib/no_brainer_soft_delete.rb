@@ -47,6 +47,7 @@ module NoBrainerSoftDelete
   end
 
   # Sets the deleted_at value to nil, thus no longer marking the document as deleted
+  # TODO: add a recursive option restore that restores soft deleted associations as well.
   def restore(options = {})
     update(deleted_at: nil)
   end
