@@ -34,6 +34,12 @@ describe NoBrainerSoftDelete do
         it "returns true when a document is destroyed" do
           expect(@project.destroy).to eq true
         end
+
+        it "fires the before and after_destroy callbacks" do
+          expect(@project).to receive(:test_before_destroy)
+          expect(@project).to receive(:test_after_destroy)
+          @project.destroy
+        end
       end
 
       describe "#really_destroy!" do
@@ -56,13 +62,13 @@ describe NoBrainerSoftDelete do
           @project = Project.unscoped.find(@project.id)
         end
 
-        it "sets deleted_at time on the document to nil" do
+        it "unsets deleted_at time on the document" do
           @project.restore
           expect(@project.deleted_at).to eq nil
         end
 
         it "returns true when a document is restored" do
-          expect(@project.restore).to eq true
+          expect(@project.restore).to eq @project
         end
       end
 
