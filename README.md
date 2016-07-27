@@ -27,23 +27,23 @@ __Methods available from NoBrainerSoftDelete:__
 
 `Model.with_deleted`
 
-This method removes *all* scopes, then applies a scope reflecting that documents should be included regardless of the value held at `deleted_at`. It is important to note, this should be the first method called in a query chain as it will override anything prior to it.
+This method removes *all* scopes, then applies a scope reflecting that documents should be included regardless of the value held at `deleted_at`. It is important to note, this only scopes the query after it in the method chain. For example, if you were looking to retrieve all records with a value of `"query_for"` including those that have been soft deleted, you must specify the `where` query after `with_deleted`.
 
 ```ruby
-# Good
+# Good - This will search all records (including those that were deleted) for a value of "query_for"
 Model.with_deleted.where(value: 'query_for')
 
-# Bad
+# Bad - This will search only the undeleted records for a value of query_for
 Model.where(value: 'query_for').with_deleted
 ```
 
 `Model.only_deleted`
 
-This method removes *all* scopes,, then applies a scope reflecting that documents only be included in the query if the have a value saved to `deleted_at`. It is important to note, this should be the first method called in a query chain as it will override anything prior to it.
+This method removes *all* scopes,, then applies a scope reflecting that documents only be included in the query if the have a value saved to `deleted_at`. This method has the same effect as `with_deleted` in that it only scopes the query after it in the method chain (see above).
 
 `Model.restore(id)`
 
-This method locates a document and restores it.
+This method locates a document and restores it. It returns the restored version of the document.
 
 `instance.deleted?`
 
